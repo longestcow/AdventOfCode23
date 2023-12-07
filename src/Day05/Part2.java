@@ -21,6 +21,7 @@ public class Part2 {
 		final long startTime = System.currentTimeMillis();
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         List<Future<Long>> futures = new ArrayList<>();
+        String seeds = "";
 		for(int i = 0; i<7; i++)list.add(new ArrayList<>());
 
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day05/input.txt")))) {
@@ -30,17 +31,8 @@ public class Part2 {
 			int index = -1;
 		    while ((line = br.readLine()) != null) {
 		    	if(line.isEmpty())continue;
-		    	else if(line.startsWith("seeds:")) {
-		    		temp=line.split("seeds: ")[1].split(" ");
-		    		for(int i = 0; i<temp.length; i+=2) {
-		    			String s=temp[i], r=temp[i+1];
-		                Future<Long> future = executorService.submit(() -> processRange(s,r));
-		                futures.add(future);
-		    		}	
-		    		executorService.shutdown();
-		    	}
-		    	else if(line.contains("map"))
-		    		index++;
+		    	else if(line.startsWith("seeds:")) seeds=line;
+		    	else if(line.contains("map"))index++;
 		    	else {
 		    		a=Long.parseLong(line.split(" ")[0]);
 		    		b=Long.parseLong(line.split(" ")[1]);
@@ -49,6 +41,14 @@ public class Part2 {
 		    	}
 
 		    }
+		    
+    		temp=seeds.split("seeds: ")[1].split(" ");
+    		for(int i = 0; i<temp.length; i+=2) {
+    			String s=temp[i], r=temp[i+1];
+                Future<Long> future = executorService.submit(() -> processRange(s,r));
+                futures.add(future);
+    		}	
+    		executorService.shutdown();
 		    
 	    	try {
 	            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
