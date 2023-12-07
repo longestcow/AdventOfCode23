@@ -12,6 +12,8 @@ public class Part1 {
     static List<List<Character>> grid = new ArrayList<>();
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
+		final long startTime = System.currentTimeMillis();
+
 	    String line;
 	    int a=0, sum=0;
 	    String symbols = "*-#/=&%$&@+";
@@ -30,7 +32,7 @@ public class Part1 {
 					sum+=neighbourChecks(i,j);
 			}
 		}
-		System.out.println(sum); // answer
+		System.out.println(sum + " ("+(System.currentTimeMillis()-startTime)+"ms)");
 	}
 
 	static int neighbourChecks(int i, int j) {

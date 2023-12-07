@@ -17,7 +17,7 @@ public class Part1 {
 		final long startTime = System.currentTimeMillis();
 
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day05/input.txt")))) {
-			String line,curr = null;
+			String line = null;
 			List<Long> seeds = new ArrayList<>();
 			for(int i = 0; i<7; i++)list.add(new ArrayList<>());
 			int index = -1;
@@ -44,8 +44,8 @@ public class Part1 {
 		    	if(i<min)min=i;
 		    }
 		    	
-		    System.out.println(min);//answer
-		    System.out.println(System.currentTimeMillis()-startTime+"ms");
+			System.out.println(min + " ("+(System.currentTimeMillis()-startTime)+"ms)");
+
 	    }
 	}
 	

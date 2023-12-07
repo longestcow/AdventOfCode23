@@ -10,12 +10,11 @@ import java.io.IOException;
 public class Part1 {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		
+		final long startTime = System.currentTimeMillis();
 		int sum = 0, curr = 0, c = 0;
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day01/input.txt")))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
-		    	System.out.println(c++);
 	    		for(int i = 0; i<=line.length()-1; i++) {
 	    			if(Character.isDigit(line.charAt(i))) {
 	    				curr+=10*Integer.parseInt(line.charAt(i)+"");
@@ -32,7 +31,7 @@ public class Part1 {
 		    	curr=0;
 		    }
 		}
-		System.out.println(sum);
+		System.out.println(sum + " ("+(System.currentTimeMillis()-startTime)+"ms)");
 
 	}
 

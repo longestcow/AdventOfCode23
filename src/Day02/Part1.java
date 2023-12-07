@@ -9,6 +9,8 @@ import java.io.IOException;
 public class Part1 {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
+		final long startTime = System.currentTimeMillis();
+
 		int red = 12, blue = 14, green = 13, sum=0;
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day02/input.txt")))) {
 		    String line, stuff;
@@ -25,7 +27,7 @@ public class Part1 {
 		    	}
 		    	sum+=Integer.parseInt(line.split(": ")[0].split(" ")[1]);
 		    }
-		    System.out.println(sum);
+			System.out.println(sum + " ("+(System.currentTimeMillis()-startTime)+"ms)");
 		}
 	}
 		

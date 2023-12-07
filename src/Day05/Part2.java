@@ -15,11 +15,13 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Part2 {
-	static List<List<Long[]>> list = new ArrayList<>(6);
-
+	static List<List<Long[]>> list = new ArrayList<>();
+	// THIS IS A MULTITHREADED BRUTEFORCE SOLUTION, ITLL USE UP *ALOT* OF YOUR CPU
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+		final long startTime = System.currentTimeMillis();
+        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         List<Future<Long>> futures = new ArrayList<>();
+		for(int i = 0; i<7; i++)list.add(new ArrayList<>());
 
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day05/input.txt")))) {
 			String line;
@@ -54,7 +56,8 @@ public class Part2 {
 	            long min = Long.MAX_VALUE;
 	            for (Future<Long> future : futures) min = Math.min(min, future.get());
 	            
-	            System.out.println(min);
+	    		System.out.println(min + " ("+(System.currentTimeMillis()-startTime)+"ms)");
+
 	            
 	        } catch (InterruptedException | ExecutionException e) {
 	            e.printStackTrace();
