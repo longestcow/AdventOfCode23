@@ -10,6 +10,8 @@ import java.util.HashMap;
 public class Part2 {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
+		final long startTime = System.currentTimeMillis();
+
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day04/input.txt")))) {
 			String line,winner,own;
 			int count = 0, sum = 0, cardNum;
@@ -25,7 +27,6 @@ public class Part2 {
 		    		if(winner.contains(" "+o+" ")) 
 		    			count++;
 		    	}
-		    	System.out.println(cardNum+":"+map.get(cardNum));
 		    	for(int j = 0; j<map.get(cardNum); j++) {
 			    	for(int i = cardNum+1; i<=cardNum+count;i++) {
 			    		if(map.containsKey(i))
@@ -38,7 +39,7 @@ public class Part2 {
 		    }
 		    for(Integer i : map.values())
 		    	sum+=i;
-		    System.out.println(sum);
+    		System.out.println(sum + " ("+(System.currentTimeMillis()-startTime)+"ms)");
 	    }
 	}
 

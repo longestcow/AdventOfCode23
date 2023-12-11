@@ -10,7 +10,8 @@ import java.util.HashMap;
 public class Part2 {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		
+		final long startTime = System.currentTimeMillis();
+
 		int sum = 0, curr = 0, cind, ind, cNum=0;
 		HashMap<String, Integer> nums = new HashMap<>();
         nums.put("one", 1);
@@ -52,7 +53,7 @@ public class Part2 {
 		    	curr=0;
 		    }
 		}
-		System.out.println(sum);
+		System.out.println(sum + " ("+(System.currentTimeMillis()-startTime)+"ms)");
 
 	}
 
