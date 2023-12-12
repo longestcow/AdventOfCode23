@@ -6,167 +6,96 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class Part2 {
-	static int size=10;
+	static int part = 1000000;
+	static char[][] grid;
+	static int[][] graph;
+	static int sizeX, sizeY;
+	static List<Integer> cols = new ArrayList<>(), rows = new ArrayList<>();
 
-	static char[][] grid = new char[size][];
-	static String curr1="", curr2="";
-	static HashMap<String,Integer> visited = new HashMap<>();
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		final long startTime = System.currentTimeMillis();
-		int in = 0;
-		String sc = "";
-		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day10/input.txt")))) {
+		List<String> lines = new ArrayList<>(), galaxies = new ArrayList<>(), combinations = new ArrayList<>();
+		HashMap<String, Integer> temp = new HashMap<>();
+		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day11/input.txt")))) {
 			String line;
+			int i = 0;
 		    while ((line = br.readLine()) != null) {
-		    	grid[in]=line.toCharArray();
-		    	if(line.contains("S")) 
-		    		sc=in+","+line.indexOf("S");
+		    	lines.add(line);
+		    	if(!line.contains("#"))rows.add(i);
 		    	
-		    	in++;
+		    	for(int j = 0; j<line.length(); j++)
+		    		if(line.charAt(j)=='#') 
+		    			galaxies.add(i+","+j);
+		    		
+			    i++;
 		    }
-		    
 	    }
-		//add both streams from s here
-		int moves = 0,max=0,x,y, count = 0;
-		char curr,next;
-		x=Integer.parseInt(sc.split(",")[0]);
-		y=Integer.parseInt(sc.split(",")[1]);
-		curr=grid[x][y];
-		visited.put(sc,0);
-		try {
-			//up
-			next=grid[x-1][y];
-			if(next=='7'||next=='F'||next=='|') 
-				curr1=(x-1)+","+y;
-			
-		} catch(Exception e) {}
-		
-		try {
-			//down
-			next=grid[x+1][y];
-			if(next=='J'||next=='L'|next=='|') {
-				if(curr1.isBlank())
-					curr1=(x+1)+","+y;
-				else curr2=(x+1)+","+y;
+		boolean s;
+		for(int i = 1; i<lines.get(0).length()-1; i++) {
+			s=true;
+			for(String line : lines) {
+				if(line.charAt(i)=='#') {
+					s=false;
+					break;
+				}
 			}
-		}catch(Exception e) {}
-		try {
-			//left
-			next=grid[x][y-1];
-			if(next=='F'||next=='L'|next=='-') {
-				if(curr1.isBlank())
-					curr1=x+","+(y-1);
-				curr2=x+","+(y-1);
-
-			}
-		}catch(Exception e) {}
-		try {
-			//right
-			next=grid[x][y+1];
-			if(next=='7'||next=='J'||next=='-') {
-				curr2=x+","+(y+1);
-			}
-		}catch(Exception e) {}
-		
-		
-		while(true) {
-			count++;
-			moves = 0;
-			x=Integer.parseInt(curr1.split(",")[0]);
-			y=Integer.parseInt(curr1.split(",")[1]);
-			curr=grid[x][y];
-			visited.put(curr1, count);
-			try {
-				//up
-				next=grid[x-1][y];
-				if((curr=='J'||curr=='L'|curr=='|') && !visited.containsKey((x-1)+","+y) && ((next=='7'||next=='F'||next=='|'))) {
-					curr1=(x-1)+","+y;
-					moves++;
-				}
-			} catch(Exception e) {}
-			try {
-				//down
-				next=grid[x+1][y];
-				if((curr=='7'||curr=='F'||curr=='|') && !visited.containsKey((x+1)+","+y) && ((next=='J'||next=='L'|next=='|'))) {
-					curr1=(x+1)+","+y;
-					moves++;
-				}
-			}catch(Exception e) {}
-			try {
-				//left
-				next=grid[x][y-1];
-				if((curr=='7'||curr=='J'||curr=='-') && !visited.containsKey(x+","+(y-1)) && ((next=='F'||next=='L'|next=='-'))) {
-					curr1=x+","+(y-1);
-					moves++;
-				}
-			}catch(Exception e) {}
-			try {
-				//right
-				next=grid[x][y+1];
-				if((curr=='F'||curr=='L'|curr=='-') && !visited.containsKey(x+","+(y+1)) && ((next=='7'||next=='J'||next=='-'))) {
-					curr1=x+","+(y+1);
-					moves++;
-				}
-			}catch(Exception e) {}
-			
-			x=Integer.parseInt(curr2.split(",")[0]);
-			y=Integer.parseInt(curr2.split(",")[1]);
-			curr=grid[x][y];
-			visited.put(curr2, count);
-			try {
-				//up
-				next=grid[x-1][y];
-				if((curr=='J'||curr=='L'|curr=='|') && !visited.containsKey((x-1)+","+y) && ((next=='7'||next=='F'||next=='|'))) {
-					curr2=(x-1)+","+y;
-					moves++;
-				}
-			} catch(Exception e) {}
-			try {
-				//down
-				next=grid[x+1][y];
-				if((curr=='7'||curr=='F'||curr=='|') && !visited.containsKey((x+1)+","+y) && ((next=='J'||next=='L'|next=='|'))) {
-					curr2=(x+1)+","+y;
-					moves++;
-				}
-			}catch(Exception e) {}
-			try {
-				//left
-				next=grid[x][y-1];
-				if((curr=='7'||curr=='J'||curr=='-') && !visited.containsKey(x+","+(y-1)) && ((next=='F'||next=='L'|next=='-'))) {
-					curr2=x+","+(y-1);
-					moves++;
-				}
-			}catch(Exception e) {}
-			try {
-				//right
-				next=grid[x][y+1];
-				if((curr=='F'||curr=='L'|curr=='-') && !visited.containsKey(x+","+(y+1)) && ((next=='7'||next=='J'||next=='-'))) {
-					curr2=x+","+(y+1);
-					moves++;
-				}
-			}catch(Exception e) {}
-
-			if(moves==0)break;
+			if(s)cols.add(i);
 		}
 		
-		for(int c : visited.values()) 
-			if(c>max)max=c;
+		for(int i = 0; i<galaxies.size(); i++) 
+			for(int j = galaxies.size()-1; j>0+(i); j--) 
+				if(i!=j)
+					combinations.add(galaxies.get(i)+"-"+galaxies.get(j));
+			
+
 		
-		System.out.println(max + " ("+(System.currentTimeMillis()-startTime)+"ms)");
-		for(int i = 0; i<size; i++) {
-			for(int j = 0; j<size; j++) {
-				if(visited.containsKey(i+","+j))System.out.print("|");
-				else System.out.print(".");
-			}
-			System.out.println();
-		}
+
+//		sizeX=lines.size(); sizeY=lines.get(0).length();
+//		grid = new char[sizeX][sizeY];
+////		graph=new int[sizeX][sizeY];
+////		for(int i = 0; i<lines.size(); i++) {
+////			grid[i]=lines.get(i).toCharArray();
+////			for(int j = 0; j<graph.length; j++) {
+////				if(rows.contains(i) || cols.contains(j))
+////					graph[i][j]=part;
+////				else graph[i][j]=1;
+////			}
+////		}
+		
+//		for(char[] arr : grid) {
+//			for(char ca : arr)
+//				System.out.print(ca);
+//			System.out.println();
+//		}
+				
+		System.out.println(rows);
+		System.out.println(cols);
+		long sum = 0;
+		for(String comb : combinations) 
+			sum+=getDist(comb.split("-")[0],comb.split("-")[1]);		
+		System.out.println(sum);
 	}
-	
+	private static long getDist(String c1, String c2) {
+		int x0 = Integer.parseInt(c1.split(",")[0]), y0 = Integer.parseInt(c1.split(",")[1]);
+		int x1 = Integer.parseInt(c2.split(",")[0]), y1 = Integer.parseInt(c2.split(",")[1]);
 
+		long distance = Math.abs(x1-x0) + Math.abs(y1-y0);
+		
+		for(int row : rows) {
+			if((x0<row && x1>row) || (x0>row && x1<row))
+				distance+=part-1;
+		}
+		for(int col : cols) {
+			if((y0<col&& y1>col) || (y0>col && y1<col))
+				distance+=part-1;
+		}
+		return distance;
+	}
+
+	
+	
 
 }
