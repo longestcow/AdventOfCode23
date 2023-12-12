@@ -6,19 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Part2 {
 	static int part = 1000000;
-	static char[][] grid;
-	static int[][] graph;
-	static int sizeX, sizeY;
 	static List<Integer> cols = new ArrayList<>(), rows = new ArrayList<>();
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		List<String> lines = new ArrayList<>(), galaxies = new ArrayList<>(), combinations = new ArrayList<>();
-		HashMap<String, Integer> temp = new HashMap<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day11/input.txt")))) {
 			String line;
 			int i = 0;
@@ -51,28 +46,7 @@ public class Part2 {
 					combinations.add(galaxies.get(i)+"-"+galaxies.get(j));
 			
 
-		
-
-//		sizeX=lines.size(); sizeY=lines.get(0).length();
-//		grid = new char[sizeX][sizeY];
-////		graph=new int[sizeX][sizeY];
-////		for(int i = 0; i<lines.size(); i++) {
-////			grid[i]=lines.get(i).toCharArray();
-////			for(int j = 0; j<graph.length; j++) {
-////				if(rows.contains(i) || cols.contains(j))
-////					graph[i][j]=part;
-////				else graph[i][j]=1;
-////			}
-////		}
-		
-//		for(char[] arr : grid) {
-//			for(char ca : arr)
-//				System.out.print(ca);
-//			System.out.println();
-//		}
-				
-		System.out.println(rows);
-		System.out.println(cols);
+	
 		long sum = 0;
 		for(String comb : combinations) 
 			sum+=getDist(comb.split("-")[0],comb.split("-")[1]);		

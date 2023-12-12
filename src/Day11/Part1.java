@@ -6,19 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Part1 {
 	static int part = 2;
-	static char[][] grid;
-	static int[][] graph;
-	static int sizeX, sizeY;
 	static List<Integer> cols = new ArrayList<>(), rows = new ArrayList<>();
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		List<String> lines = new ArrayList<>(), galaxies = new ArrayList<>(), combinations = new ArrayList<>();
-		HashMap<String, Integer> temp = new HashMap<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day11/input.txt")))) {
 			String line;
 			int i = 0;
@@ -51,75 +46,29 @@ public class Part1 {
 					combinations.add(galaxies.get(i)+"-"+galaxies.get(j));
 			
 
-		
-
-		sizeX=lines.size(); sizeY=lines.get(0).length();
-		grid = new char[sizeX][sizeY];
-		graph=new int[sizeX][sizeY];
-		for(int i = 0; i<lines.size(); i++) {
-			grid[i]=lines.get(i).toCharArray();
-			for(int j = 0; j<graph.length; j++) {
-				if(rows.contains(i) || cols.contains(j))
-					graph[i][j]=part;
-				else graph[i][j]=1;
-			}
-		}
-		
-		for(char[] arr : grid) {
-			for(char ca : arr)
-				System.out.print(ca);
-			System.out.println();
-		}
-				
-		System.out.println(rows);
-		System.out.println(cols);
-		int sum = 0;
+	
+		long sum = 0;
 		for(String comb : combinations) 
 			sum+=getDist(comb.split("-")[0],comb.split("-")[1]);		
 		System.out.println(sum);
 	}
-	private static int getDist(String c1, String c2) {
-		int step = 0, x,y;
-		List<String> visited = new ArrayList<>(), temp = new ArrayList<>();;
-		visited.add(c1);
-		
-		while(!visited.contains(c2)) {
-			for(String c : visited) {
-				x = Integer.parseInt(c.split(",")[0]); y= Integer.parseInt(c.split(",")[1]);
-				if(x+1<sizeX && (grid[x+1][y]=='.' || ((x+1)+","+y).equals(c2)) && !visited.contains((x+1)+","+y)) {
-					temp.add((x+1)+","+y);
-				}
-				if(x-1>=0 && (grid[x-1][y]=='.' || ((x-1)+","+y).equals(c2)) && !visited.contains((x-1)+","+y)) {
-					temp.add((x-1)+","+y);
-				}
-				if(y+1<sizeY && (grid[x][y+1]=='.' || (x+","+(y+1)).equals(c2)) && !visited.contains(x+","+(y+1))) {
-					temp.add(x+","+(y+1));
-				}
-				if(y-1>=0 && (grid[x][y-1]=='.' || (x+","+(y-1)).equals(c2)) && !visited.contains(x+","+(y-1))) {
-					temp.add(x+","+(y-1));
-				}
-			}
-			visited.addAll(temp);
-			temp.clear();
+	private static long getDist(String c1, String c2) {
+		int x0 = Integer.parseInt(c1.split(",")[0]), y0 = Integer.parseInt(c1.split(",")[1]);
+		int x1 = Integer.parseInt(c2.split(",")[0]), y1 = Integer.parseInt(c2.split(",")[1]);
 
-			step++;
-		}
+		long distance = Math.abs(x1-x0) + Math.abs(y1-y0);
 		
-		return step;
-	}
-	static void printGrid(List<String> coords, String c1, String c2) {
-		for(int i = 0; i<sizeX; i++) {
-			for(int j = 0; j<sizeY; j++) {
-				if((i+","+j).equals(c1) || (i+","+j).equals(c2)) 
-					System.out.print("\u001B[32m#\u001B[0m");
-				else if (coords.contains(i+","+j))
-					System.out.print("\u001B[32m#\u001B[0m");
-				else System.out.print(".");
-				
-			}
-			System.out.println();
+		for(int row : rows) {
+			if((x0<row && x1>row) || (x0>row && x1<row))
+				distance+=part-1;
 		}
+		for(int col : cols) {
+			if((y0<col&& y1>col) || (y0>col && y1<col))
+				distance+=part-1;
+		}
+		return distance;
 	}
+
 	
 	
 
