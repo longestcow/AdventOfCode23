@@ -52,6 +52,19 @@ public class Part1 {
 
 	}
 	
+	static void rotateCW() {
+	    final int M = grid.length;
+	    final int N = grid[0].length;
+	    char[][] ret = new char[N][M];
+	    for (int r = 0; r < M; r++) {
+	        for (int c = 0; c < N; c++) {
+	            ret[c][M-1-r] = grid[r][c];
+	        }
+	    }
+	    
+	    grid = Arrays.stream(ret).map(char[]::clone).toArray(char[][]::new);
+	}
+	
 
 
 	
