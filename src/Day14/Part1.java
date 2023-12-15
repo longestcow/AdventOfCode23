@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Part1 {
-	hs7u8fygsyerh67uyfgtw5er4i67tri675
 	static int s1 = ".OO.O.#....O.O#......O#...#.##O#...O.#....#..O#O..#...#....O..OOO#.#.....O#.#O.##.#O#O.#.O....#.##O.".length();
 	static int s2 = "O....#....".length();
 	static char[][] grid = new char[s1][s1];
