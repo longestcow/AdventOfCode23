@@ -5,15 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
-public class Part1 {
+public class Part1 { // i am not proud of this code
 	static int size = 140;
 
-	static char[][] grid = new char[size][];
+	static char[][] grid = new char[size][]; 
 	static String curr1="", curr2="";
 	static HashMap<String,Integer> visited = new HashMap<>();
 	public static void main(String[] args) throws FileNotFoundException, IOException {

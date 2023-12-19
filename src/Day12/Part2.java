@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Part1 {
+public class Part2 { //UNFINISHED
 	static List<String> records = new ArrayList<>();
 	static List<List<Integer>> counts = new ArrayList<>();
 	public static void main(String[] args) throws FileNotFoundException, IOException {
@@ -34,7 +34,6 @@ public class Part1 {
 			curr+=dfs("#", key, counts.get(j), qs, 0);
 			curr+=dfs(".", key, counts.get(j), qs, 0);
 			sum+=curr;
-
 		}
 		System.out.println(sum);
 	}
