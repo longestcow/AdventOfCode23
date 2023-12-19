@@ -13,91 +13,64 @@ import java.util.List;
 
 public class Part2 {
 	static char[][] grid;
-	public static void main(String[] args) throws FileNotFoundException, IOException {
+	static HashMap<String, List<String>> workflow = new HashMap<>();
+	public static void main(String[] args) throws FileNotFoundException, IOException {	
 		final long startTime = System.currentTimeMillis();
-		List<Part> parts = new ArrayList<>(), accepted = new ArrayList<>();
-		HashMap<String, List<String>> workflow = new HashMap<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("src/Day19/input.txt")))) {
 			String line;
 			boolean part = false;
 		    while ((line = br.readLine()) != null) {
-		    	if(line.isEmpty())part=true;
-		    	else if(!part) {
-		    		line=line.replace("}", "");
-		    		workflow.put(line.split("\\{")[0], Arrays.asList(line.split("\\{")[1].split(",")));
-		    	}
-		    	else {
-		    		line=line.replace("a=", "").replace("s=", "").replace("m=", "").replace("x=","").replace("{", "").replace("}","");
-		    		parts.add(new Part(line.split(",")));
-		    	}
+		    	if(line.isEmpty())break;
+	    		line=line.replace("}", "");
+	    		workflow.put(line.split("\\{")[0], Arrays.asList(line.split("\\{")[1].split(",")));
 		    }
 	    }
-		String condition,output;
-		for(Part p : parts) {
-			p: while(true) {
-				for(String s : workflow.get(p.workflow)) {
-					if(!s.contains(":")) { // no condition
-						if(s.equals("A")) {
-							accepted.add(p);
-							break p;
-						}
-						else if(s.equals("R")) 
-							break p;
-						else {
-							p.workflow=s;
-							continue p;
-						}
-					}
-					
-					condition = s.split(":")[0];
-					output = s.split(":")[1];
-					if(p.check(condition)) {
-						if(output.equals("A")) {
-							accepted.add(p);
-							break p;
-						}
-						else if(output.equals("R")) 
-							break p;
-						else {
-							p.workflow=output;
-							continue p;
-						}
-					}
-					else continue;
-					
+		
+		System.out.println(lookForA("in", new ArrayList<String>()));
+	
+	}
+	
+	static long lookForA(String wf, List<String> pstuff){
+		List<String> stuff = new ArrayList<String>(),cstuff = new ArrayList<String>(), current = workflow.get(wf);
+		cstuff.addAll(pstuff);
+		boolean count = false;
+		long sum = 0;
+		if(current.stream().anyMatch(s -> s.contains("A")))
+			count=true;//we should keep count of all ranges until a
+		for(String work : current) {
+			if(work.equals("A") || work.equals("R")) return 0;
+			if(!work.contains(":")) sum+=lookForA(work, cstuff); // last one, dont have to worry about a as stuff should have all ranges by now
+			else {
+				if(work.contains("A")) {
+					stuff.add(work.split(":")[0]); // add inverse range
+					count=false;//stop counting now
+				}
+				else {
+					cstuff.add(work.split(":")[0]);
+					if(count)stuff.add(inverse(work.split(":")[0])); // add inverse range
+					if(!work.split(":")[1].equals("R"))//if not r, go into branch
+						sum+=lookForA(work.split(":")[1], cstuff); // look for branch
 				}
 			}
+			
 		}
-		int sum = 0;
-		for(Part p : accepted)sum+=p.sum();
-		System.out.println(sum);
-	}
-	
-
-
-}
-class Route{
-	public HashMap<Character, Integer> map = new HashMap<>();
-	public String workflow="in";
-	
-	Route(String[] ar){
-		map.put('x', Integer.parseInt(ar[0]));
-		map.put('m', Integer.parseInt(ar[1]));
-		map.put('a', Integer.parseInt(ar[2]));
-		map.put('s', Integer.parseInt(ar[3]));
-
-	}
-
-	public int sum() {
-		int sum = 0;
-		for(int v : map.values())sum+=v;
+		
+		System.out.println(wf +": "+cstuff+","+stuff);
+		//stuff -> sum
+		
 		return sum;
+
 	}
 
-	public boolean check(String condition) {
-		if(condition.charAt(1)=='>')
-			return map.get(condition.charAt(0))>Integer.parseInt(condition.split(">")[1]);
-		return map.get(condition.charAt(0))<Integer.parseInt(condition.split("<")[1]);
+	static String inverse(String s) {
+		if(s.charAt(1)=='>')
+			return s.replace(">", "<=");
+		else
+			return s.replace("<", ">=");
 	}
+	
+
+
 }
+
 
